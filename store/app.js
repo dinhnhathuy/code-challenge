@@ -2,6 +2,7 @@ import { isString } from '@/utils/types'
 import pick from 'lodash/pick'
 import set from 'lodash/set'
 import get from 'lodash/get'
+import compact from 'lodash/compact'
 import { blockData, propsData, mapData, componentMapProps } from '@/constant/dragBlock'
 
 const transformBlock = (data) => {
@@ -58,14 +59,12 @@ export const actions = {
     componentMapProps[transformPayload[mapData[blockData.COMPONENT]]].map(x => {
       set(test, x, '')
     })
-    console.log(test)
 
     commit('ADD_BLOCK', commitData)
   },
   setTarget({ commit, state }, payload) {
     const id = payload.id || 0
     const targetBlock = state.listBlocks.find((x) => x.id === id)
-    console.log('setTarget', targetBlock)
     commit('SET_TARGET', targetBlock)
   },
   onChangeData({ commit }, payload) {
@@ -87,12 +86,8 @@ export const actions = {
   },
   setBlocks({ commit }, payload) {
     const data = get(payload, 'data', [])
-    let blocks = []
-    if(get(data, 'length', 0) > 0) data.forEach(x => {
-      const block = JSON.parse(x)
-      return blocks.push(transformBlock(block))
-    });
-    commit('SET_BLOCKS', blocks)
+    const blocks = Object.values(data)
+    commit('SET_BLOCKS', compact(blocks))
     return 'get successful'
   },
   clearBlocks({ commit }) {
@@ -101,7 +96,7 @@ export const actions = {
       commit('SET_BLOCKS', [])
       commit('SET_TARGET', {})
     }
-  }
+  },
 }
 
 export const getters = {
@@ -118,7 +113,6 @@ export const getters = {
           ),
         },
       }
-      console.log('state.targetBlock', target)
       return target
     }
     return {}

@@ -1,6 +1,6 @@
 import { History } from 'stateshot'
+import { mapGetters } from 'vuex'
 import Vue from 'vue'
-import values from 'lodash/values'
 
 const history = new History
 const snapState =  {
@@ -11,6 +11,10 @@ const snapState =  {
   },
 
   computed: {
+    ...mapGetters({
+      blocks: 'app/blocks',
+      targetBlock: 'app/targetBlock',
+    }),
     canUndo() {
       return this.history.hasUndo
     },
@@ -21,22 +25,19 @@ const snapState =  {
 
   methods: {
     undoHandle() {
-      this.history.undo().get()
-      this.setBlocksState()
+      const blocks = this.history.undo().get()
+      this.setBlocksState(blocks)
     },
     redoHandle() {
-      this.history.redo().get()
-      this.setBlocksState()
+      const blocks = this.history.redo().get()
+      this.setBlocksState(blocks)
     },
-    pushState(target) {
+    pushState(target = this.blocks) {
       this.history.push(target)
     },
-    setBlocksState() {
-      const listRes = this.history.$chunks
-      const index = this.history.$index
-      const allRecords = values(listRes)
-      const listRecords = allRecords.slice(0, index + 1)
-      this.$store.dispatch('app/setBlocks', { data: listRecords })
+    setBlocksState(blocks) {
+      this.$store.dispatch('app/setBlocks', { data: blocks })
+      this.$store.dispatch('app/setTarget', { id: this.targetBlock.id })
     }
   },
 

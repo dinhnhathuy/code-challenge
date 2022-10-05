@@ -95,7 +95,7 @@ export default {
       this.$emit('change', event.target.value, this.target, field)
     },
     handleCommitHistory(target) {
-      this.pushState(target)
+      this.pushState(this.items)
     },
   },
 }

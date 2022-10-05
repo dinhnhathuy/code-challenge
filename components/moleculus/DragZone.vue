@@ -11,11 +11,6 @@
         type: String,
       }
     },
-    methods: {
-      dragHandle(e) {
-
-      }
-    }
   }
 </script>
 

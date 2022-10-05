@@ -26,7 +26,7 @@ export default {
     targetComponent(component) {
       const id = component.id
       const isAdmin = component.propsData.isAdmin
-      isAdmin && this.$store.dispatch('app/setTarget', { id })
+      this.$store.dispatch('app/setTarget', { id })
     }
   }
 }

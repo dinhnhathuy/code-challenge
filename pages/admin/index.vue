@@ -1,6 +1,8 @@
 <template>
   <section class="page__wrapper">
-    <div class="page__header">header</div>
+    <div class="page__header">
+      <MoleculusActionsBar></MoleculusActionsBar>
+    </div>
     <div class="page__body">
       <div class="page__body--left">
         <DragZone>
@@ -65,11 +67,15 @@ export default {
       },
     },
   },
+  mounted() {
+    this.$store.dispatch('app/getBlocks')
+  },
   methods: {
-    onChange(input, target) {
+    onChange(input, target, field) {
       this.$store.dispatch('app/onChangeData', {
         id: target.id,
-        input
+        input,
+        field
       })
     }
   }
@@ -85,7 +91,7 @@ export default {
 .page__header {
   width: 100%;
   border-bottom: 1px solid black;
-  height: 40px;
+  height: 60px;
 }
 
 .page__body {
@@ -94,7 +100,7 @@ export default {
 
 .page__body--left {
   width: 20%;
-  height: calc(100vh - 40px);
+  height: calc(100vh - 60px);
   border-right: 1px solid black;
 }
 

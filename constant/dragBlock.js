@@ -1,3 +1,8 @@
+export const dynamicComponent = {
+  button: 'AtomsButton',
+  paragraph: 'AtomsParagraph'
+}
+
 export const blockData = {
   COMPONENT: 'component',
   PROPSDATA: 'propsData',
@@ -13,4 +18,9 @@ export const mapData = {
   [blockData.COMPONENT]: 'tag',
   [blockData.PROPSDATA]: 'propsData',
   [blockData.ID]: 'id',
+}
+
+export const componentMapProps = {
+  [dynamicComponent.button]: ['text', 'message'],
+  [dynamicComponent.paragraph]: ['text']
 }

@@ -3,11 +3,8 @@
     <div
       v-for="(item, i) in listActions"
       :key="i"
-      class="list__item"
-      :class="{
-        'list__item--diable': item && item.diasble ? item.diasble : false,
-      }"
-      @click="handleActions(item.action)"
+      :class="`${item.disable ? 'list__item--disable' : ''} list__item`"
+      @click="handleActions(item.action, item.disable)"
     >
       {{ item.title }}
     </div>
@@ -29,12 +26,12 @@ export default {
         {
           title: 'Undo',
           action: 'Undo',
-          disable: this.canUndo,
+          disable: !this.canUndo,
         },
         {
           title: 'Redo',
           action: 'Redo',
-          disable: this.canRedo,
+          disable: !this.canRedo,
         },
         {
           title: 'Export',
@@ -56,22 +53,22 @@ export default {
     },
   },
   methods: {
-    handleActions(action) {
+    handleActions(action, disable) {
       switch (action) {
         case 'Save':
-          this.ActionSave()
+          this.ActionSave(disable)
           break;
         case 'Undo':
-          this.ActionUndo()
+          this.ActionUndo(disable)
           break;
         case 'Redo':
-          this.ActionRedo()
+          this.ActionRedo(disable)
           break;
         case 'View':
-          this.ActionView()
+          this.ActionView(disable)
           break;
         case 'Clear':
-          this.ActionClear()
+          this.ActionClear(disable)
           break;
 
         default:
@@ -83,13 +80,17 @@ export default {
       const message = this.$store.dispatch('app/saveBlocks')
       console.log(message)
     },
-    ActionUndo() {
-      console.log('undo')
-      this.undoHandle()
+    ActionUndo(disable) {
+      if(!disable) {
+        this.undoHandle()
+        console.log('undo')
+      }
     },
-    ActionRedo() {
-      console.log('redo')
-      this.redoHandle()
+    ActionRedo(disable) {
+      if(!disable) {
+        this.redoHandle()
+        console.log('redo')
+      }
     },
     ActionView() {
       console.log('view')
@@ -121,9 +122,9 @@ export default {
   opacity: 0.8;
 }
 
-.list__item--disable {
+.list__item.list__item--disable {
   cursor: not-allowed;
-  background: lightcoral;
+  background: lightcoral !important;
 }
 
 .list__wrapper {

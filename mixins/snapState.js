@@ -2,10 +2,11 @@ import { History } from 'stateshot'
 import Vue from 'vue'
 import values from 'lodash/values'
 
+const history = new History
 const snapState =  {
   data() {
     return {
-      history: new History()
+      history
     }
   },
 
@@ -28,12 +29,12 @@ const snapState =  {
       this.setBlocksState()
     },
     pushState(target) {
-      this.history.pushSync(target)
+      this.history.push(target)
     },
     setBlocksState() {
-      const listChunks = this.history.$chunks
+      const listRes = this.history.$chunks
       const index = this.history.$index
-      const allRecords = values(listChunks)
+      const allRecords = values(listRes)
       const listRecords = allRecords.slice(0, index + 1)
       this.$store.dispatch('app/setBlocks', { data: listRecords })
     }

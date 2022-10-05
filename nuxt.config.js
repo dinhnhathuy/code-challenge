@@ -23,7 +23,7 @@ export default {
     { src: '@/plugins/lodash' },
 
     //mixins
-    { src: '@/mixins/mouseTracking'}
+    { src: '@/mixins/snapState'}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

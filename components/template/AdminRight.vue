@@ -4,17 +4,17 @@
       class="area__top"
       style="height: 85%; width: 100%; border-bottom: 1px solid black"
     >
-      <MoleculusDropZone>
-        <template #default="{ click }">
+      <MoleculusDropZone  @handleCommitHistory="handleCommitHistory">
+        <template #default="{ customClick }">
           <div style="display: flex; flex-direction: row">
             <div class="area__left">
-              <p @click="click">Mouse:({{ x }}, {{ y }})</p>
+              <p>Mouse:({{ x }}, {{ y }})</p>
               <p>Dragging:</p>
               <p>instances: {{ items.length }}</p>
               <p>config: {{ JSON.stringify(target) }}</p>
             </div>
             <div class="area__right">
-              <div v-for="(block, index) in items" @click="click(block)">
+              <div v-for="(block, index) in items" @click="customClick(block)">
                 <component
                   :key="index"
                   :is="block.component"
@@ -46,8 +46,10 @@
 </template>
 
 <script>
+// import historyTracking from '@/mixins/historyTracking'
 import mouseTracking from '@/mixins/mouseTracking'
 export default {
+  // mixins: [mouseTracking, historyTracking],
   mixins: [mouseTracking],
   props: {
     items: {
@@ -91,6 +93,9 @@ export default {
   methods: {
     change(event, field) {
       this.$emit('change', event.target.value, this.target, field)
+    },
+    handleCommitHistory(target) {
+      this.pushState(target)
     },
   },
 }

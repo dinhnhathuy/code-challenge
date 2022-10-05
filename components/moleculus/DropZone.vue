@@ -1,6 +1,6 @@
 <template>
   <div @dragover.prevent @drop.prevent="dropHandle" style="width: 100%; height: 100%; ">
-    <slot :click="targetComponent"></slot>
+    <slot :customClick="targetComponent"></slot>
   </div>
 </template>
 
@@ -19,13 +19,14 @@ export default {
       // console.log('dropZone', id, component)
       const options = this.$merge(JSON.parse(component), { id })
       this.$store.dispatch('app/addBlock', options)
+      this.$emit('handleCommitHistory', options)
     },
     createId() {
       return 'id_' + Date.now()
     },
     targetComponent(component) {
       const id = component.id
-      const isAdmin = component.propsData.isAdmin
+      const isAdmin = this.$get(component, 'propsData.isAdmin', false)
       this.$store.dispatch('app/setTarget', { id })
     }
   }

@@ -1,7 +1,22 @@
 import { isString } from '@/utils/types'
 import pick from 'lodash/pick'
 import set from 'lodash/set'
+import get from 'lodash/get'
 import { blockData, propsData, mapData, componentMapProps } from '@/constant/dragBlock'
+
+const transformBlock = (data) => {
+  const component = data[mapData[blockData.COMPONENT]]
+  let props = {}
+  componentMapProps[data[mapData[blockData.COMPONENT]]].map(x => {
+    set(props, x, x)
+  })
+  const commitData = {
+    [blockData.COMPONENT]: component,
+    [blockData.PROPSDATA]: props,
+    [blockData.ID]: data[mapData[blockData.ID]],
+  }
+  return commitData
+}
 
 export const state = () => ({
   listBlocks: [],
@@ -69,6 +84,16 @@ export const actions = {
       commit('SET_BLOCKS', JSON.parse(blocks))
       return 'get successful'
     }
+  },
+  setBlocks({ commit }, payload) {
+    const data = get(payload, 'data', [])
+    let blocks = []
+    if(get(data, 'length', 0) > 0) data.forEach(x => {
+      const block = JSON.parse(x)
+      return blocks.push(transformBlock(block))
+    });
+    commit('SET_BLOCKS', blocks)
+    return 'get successful'
   },
   clearBlocks({ commit }) {
     if(localStorage && localStorage.getItem('blocks')) {

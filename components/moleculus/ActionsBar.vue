@@ -1,76 +1,105 @@
 <template>
   <div class="list list__wrapper">
-    <div v-for="(item, i) in listActions" :key="i" class="list__item" @click="handleActions(item.action)">{{ item.title }}</div>
+    <div
+      v-for="(item, i) in listActions"
+      :key="i"
+      class="list__item"
+      :class="{
+        'list__item--diable': item && item.diasble ? item.diasble : false,
+      }"
+      @click="handleActions(item.action)"
+    >
+      {{ item.title }}
+    </div>
   </div>
 </template>
 
 <script>
-const listActions = [
-  {
-    title: 'Save',
-    action: 'save'
-  },
-  {
-    title: 'Undo',
-    action: 'undo'
-  },
-  {
-    title: 'Redo',
-    action: 'redo'
-  },
-  {
-    title: 'Export',
-    action: 'export'
-  },
-  {
-    title: 'Import',
-    action: 'import'
-  },
-  {
-    title: 'View',
-    action: 'view'
-  },
-  {
-    title: 'Clear',
-    action: 'clear'
-  },
-]
 export default {
   data() {
-    return {
-      listActions
-    }
+    return {}
+  },
+  computed: {
+    listActions() {
+      return [
+        {
+          title: 'Save',
+          action: 'Save',
+        },
+        {
+          title: 'Undo',
+          action: 'Undo',
+          disable: this.canUndo,
+        },
+        {
+          title: 'Redo',
+          action: 'Redo',
+          disable: this.canRedo,
+        },
+        {
+          title: 'Export',
+          action: 'Export',
+        },
+        {
+          title: 'Import',
+          action: 'Import',
+        },
+        {
+          title: 'View',
+          action: 'View',
+        },
+        {
+          title: 'Clear',
+          action: 'Clear',
+        },
+      ]
+    },
   },
   methods: {
     handleActions(action) {
-      this[action]()
+      switch (action) {
+        case 'Save':
+          this.ActionSave()
+          break;
+        case 'Undo':
+          this.ActionUndo()
+          break;
+        case 'Redo':
+          this.ActionRedo()
+          break;
+        case 'View':
+          this.ActionView()
+          break;
+        case 'Clear':
+          this.ActionClear()
+          break;
+
+        default:
+          break;
+      }
     },
-    save() {
+    ActionSave() {
       console.log('save')
       const message = this.$store.dispatch('app/saveBlocks')
       console.log(message)
     },
-    undo() {
+    ActionUndo() {
       console.log('undo')
+      this.undoHandle()
     },
-    redo() {
+    ActionRedo() {
       console.log('redo')
+      this.redoHandle()
     },
-    export() {
-      console.log('export')
-    },
-    import() {
-      console.log('import')
-    },
-    view() {
+    ActionView() {
       console.log('view')
-      this.$router.push({name: 'customer'})
+      this.$router.push({ name: 'customer' })
     },
-    clear() {
+    ActionClear() {
       console.log('clear')
       this.$store.dispatch('app/clearBlocks')
     },
-  }
+  },
 }
 </script>
 
@@ -85,11 +114,16 @@ export default {
   background: red;
   color: #fff;
   cursor: pointer;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .list__item:hover {
   opacity: 0.8;
+}
+
+.list__item--disable {
+  cursor: not-allowed;
+  background: lightcoral;
 }
 
 .list__wrapper {

@@ -75,10 +75,9 @@ export default {
           break;
       }
     },
-    ActionSave() {
-      console.log('save')
-      const message = this.$store.dispatch('app/saveBlocks')
-      console.log(message)
+    async ActionSave() {
+      const message = await this.$store.dispatch('app/saveBlocks')
+      window.alert(message)
     },
     ActionUndo(disable) {
       if(!disable) {

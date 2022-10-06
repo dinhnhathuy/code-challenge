@@ -28,7 +28,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { propsData } from '@/constant/dragBlock'
-import debounce from 'lodash/debounce'
+import debounce from 'lodash.debounce'
 import DragZone from '~/components/moleculus/DragZone.vue'
 import DropZone from '~/components/moleculus/DropZone.vue'
 export default {
@@ -44,7 +44,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      blocks: 'app/blocks',
       targetBlock: 'app/targetBlock',
     }),
 
@@ -78,10 +77,11 @@ export default {
         input,
         field
       })
-      debounce(function() {
-        this.pushState()
-      }, 1500)
+      this.handleSave()
     },
+    handleSave: debounce(function (value) {
+      this.pushState()
+    }, 1500),
   }
 }
 </script>

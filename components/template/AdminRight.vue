@@ -46,10 +46,8 @@
 </template>
 
 <script>
-// import historyTracking from '@/mixins/historyTracking'
 import mouseTracking from '@/mixins/mouseTracking'
 export default {
-  // mixins: [mouseTracking, historyTracking],
   mixins: [mouseTracking],
   props: {
     items: {
@@ -94,7 +92,7 @@ export default {
     change(event, field) {
       this.$emit('change', event.target.value, this.target, field)
     },
-    handleCommitHistory(target) {
+    handleCommitHistory() {
       this.pushState(this.items)
     },
   },

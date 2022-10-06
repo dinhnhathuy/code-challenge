@@ -2,11 +2,11 @@ import { History } from 'stateshot'
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
 
-const history = new History
-const snapState =  {
+const history = new History()
+const snapState = {
   data() {
     return {
-      history
+      history,
     }
   },
 
@@ -20,7 +20,7 @@ const snapState =  {
     },
     canRedo() {
       return this.history.hasRedo
-    }
+    },
   },
 
   methods: {
@@ -37,10 +37,10 @@ const snapState =  {
     },
     setBlocksState(blocks) {
       this.$store.dispatch('app/setBlocks', { data: blocks })
-      this.$store.dispatch('app/setTarget', { id: this.targetBlock.id })
-    }
+      if (this.targetBlock && this.targetBlock.id)
+        this.$store.dispatch('app/setTarget', { id: this.targetBlock.id })
+    },
   },
-
 }
 
 Vue.mixin(snapState)

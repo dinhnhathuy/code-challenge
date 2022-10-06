@@ -27,16 +27,6 @@ export default {
       const componentOptions = JSON.stringify(this.$cloneDeep(this.$get(slotComponent, 'componentOptions', {})))
       e.dataTransfer.setData('component', componentOptions)
     },
-    getComponentName (options) {
-      const name = options.name || options._componentTag
-      if (name) {
-        return name
-      }
-      const file = options.__file
-      if (file) {
-        return classify(basename(file, '.vue'))
-      }
-    }
   }
 }
 </script>

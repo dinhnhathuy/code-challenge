@@ -13,10 +13,11 @@ export default {
     }
   },
   methods: {
+    // push droped component to state
+    // commit history
     dropHandle(e) {
       const id = this.createId()
       const component = e.dataTransfer.getData('component')
-      // console.log('dropZone', id, component)
       const options = this.$merge(JSON.parse(component), { id })
       this.$store.dispatch('app/addBlock', options)
       this.$emit('handleCommitHistory', options)
@@ -24,9 +25,9 @@ export default {
     createId() {
       return 'id_' + Date.now()
     },
+    // get the edditable component
     targetComponent(component) {
       const id = component.id
-      const isAdmin = this.$get(component, 'propsData.isAdmin', false)
       this.$store.dispatch('app/setTarget', { id })
     }
   }
